@@ -1,11 +1,20 @@
 <script setup lang="ts">
-import type { Todo, TodoStatusType } from '@/models/Todo';
+import { TodoStatusType, type Todo } from '@/models/Todo';
 import {deleteTask, getTasks, updateTask} from '@/services/TodoService'
-import { onMounted, ref, type HtmlHTMLAttributes } from 'vue';
+import { onMounted, ref, type HtmlHTMLAttributes, computed } from 'vue';
 
 const emit = defineEmits(['select'])
 
 const tasks = ref<Todo[]>()
+const activeTasks = computed(() => {
+  const _tasks = (tasks?.value || [])
+  return _tasks.filter((task:Todo) => [TodoStatusType.IN_PROGRESS, TodoStatusType.PENDING].includes(task.state))
+})
+
+const completedTasks = computed(() => {
+  const _tasks = (tasks?.value || [])
+  return _tasks.filter((task:Todo) => TodoStatusType.COMPLETED === task.state)
+})
 
 onMounted(() => {
   loadTasks()
@@ -27,6 +36,11 @@ const onUpdate = async (target:HTMLInputElement, task:Todo) => {
 
 const onSelect = (todo: Todo) => emit('select', todo)
 
+const onMarkAsComplete = async (task: Todo) => {
+  await updateTask(task.task_id, {...task, state: TodoStatusType.COMPLETED})
+  loadTasks()
+}
+
 defineExpose({
   loadTasks
 })
@@ -34,7 +48,21 @@ defineExpose({
 
 <template>
   <ul class="tasks">
-    <li v-for="task in tasks" class="tasks--item">
+    <li class="tasks--item-divider">Completed Task</li>
+    <li v-for="task in completedTasks" class="tasks--item">
+      <h4 class="tasks--item-name green">
+        {{ task.name }} 
+      </h4>
+      <p class="tasks--item-description">{{ task.description }}</p>
+      <div class="tasks--item-actions">
+        <span></span>
+        <span class="tasks--item-actions-buttons">
+          <button @click="onDelete(task.task_id)" class="btn btn--error btn--small">remove</button>
+        </span>
+      </div>
+    </li>
+    <li class="tasks--item-divider">Active Task</li>
+    <li v-for="task in activeTasks" class="tasks--item">
       <h4 class="tasks--item-name">
         {{ task.name }} 
       </h4>
@@ -48,6 +76,7 @@ defineExpose({
         <span class="tasks--item-actions-buttons">
           <button @click="onSelect(task)" class="btn btn--default btn--small">edit</button>
           <button @click="onDelete(task.task_id)" class="btn btn--error btn--small">remove</button>
+          <button @click="onMarkAsComplete(task)" class="btn btn--primary btn--small">complete</button>
         </span>
       </div>
     </li>
@@ -64,9 +93,21 @@ defineExpose({
     line-height: 1.5rem;
   }
 
+  &--item-divider {
+    padding: 5px 10px;
+    background: #262525;
+    text-align: center;
+    font-size: 1.2rem;
+    color: white;
+  }
+
   &--item-name {
     font-size: 1.2rem;
     color: white;
+
+    &.green {
+      color: hsla(160, 100%, 37%, 1);
+    }
   }
 
   &--item {

@@ -14,6 +14,11 @@
       border-color: #723030;
       color: white;
     }
+    &--primary {
+      background-color: hsla(160, 100%, 37%, 1);
+      border-color: hsla(160, 100%, 37%, 1);
+      color: white;
+    }
     &--transparent {
       background: none;
       border: 1px solid #acacac;
