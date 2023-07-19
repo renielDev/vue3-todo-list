@@ -22,6 +22,8 @@ const onSelect = (todo:Todo) => {
 </script>
 
 <template>
-  <TaskList ref="tasks" @select="onSelect"/>
-  <TaskForm ref="taskForm" @create="onCreate" @update="onUpdate"/>
+  <div>
+    <TaskList ref="tasks" @select="onSelect"/>
+    <TaskForm ref="taskForm" @create="onCreate" @update="onUpdate"/>
+  </div>
 </template>

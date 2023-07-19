@@ -44,12 +44,16 @@ defineExpose({
 
 </script>
 <template>
-  <label for="name">Name:</label>
-  <input type="text" name="name" v-model="data.form.name">
-
-  <label for="description">Description:</label>
-  <textarea name="description" v-model="data.form.description" />
-
-  <button @click="onSubmit">{{ data.id ? "update": "create" }}</button>
-  <button v-if="data.id" @click="clearForm">cancel</button>
+  <div>
+    <label for="name">Name:</label>
+    <input type="text" name="name" v-model="data.form.name">
+  </div>
+  <div>
+    <label for="description">Description:</label>
+    <textarea name="description" v-model="data.form.description" />
+  </div>
+  <div>
+    <button @click="onSubmit">{{ data.id ? "update": "create" }}</button>
+    <button v-if="data.id" @click="clearForm">cancel</button>
+  </div>
 </template>

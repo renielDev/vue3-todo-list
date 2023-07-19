@@ -1,0 +1,15 @@
+.btn {
+  border-radius: 3px;
+  padding: 2px 5px;
+  border-style: solid;
+  &--default {
+    background-color: #efefef;
+    border-color: #efefef;
+    color: black;
+  }
+  &--error {
+    background-color: #723030;
+    border-color: #723030;
+    color: white;
+  }
+}
