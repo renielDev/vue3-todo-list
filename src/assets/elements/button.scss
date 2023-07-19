@@ -1,15 +1,31 @@
 .btn {
-  border-radius: 3px;
-  padding: 2px 5px;
+  padding: 4px 7px;
   border-style: solid;
-  &--default {
-    background-color: #efefef;
-    border-color: #efefef;
-    color: black;
+  line-height: 1.5rem;
+
+  &.btn {
+    &--default {
+      background-color: #efefef;
+      border-color: #efefef;
+      color: black;
+    }
+    &--error {
+      background-color: #723030;
+      border-color: #723030;
+      color: white;
+    }
+    &--transparent {
+      background: none;
+      border: 1px solid #acacac;
+      color: white;
+    }
+    &--small {
+      line-height: 1rem;
+      padding: 2px 5px;
+    }
   }
-  &--error {
-    background-color: #723030;
-    border-color: #723030;
-    color: white;
+
+  &:hover {
+    opacity: 0.8;
   }
 }

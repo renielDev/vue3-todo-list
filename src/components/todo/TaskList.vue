@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { Todo } from '@/models/Todo';
-import {deleteTask, getTasks} from '@/services/TodoService'
-import { onMounted, ref } from 'vue';
+import type { Todo, TodoStatusType } from '@/models/Todo';
+import {deleteTask, getTasks, updateTask} from '@/services/TodoService'
+import { onMounted, ref, type HtmlHTMLAttributes } from 'vue';
 
 const emit = defineEmits(['select'])
 
@@ -21,6 +21,10 @@ const onDelete = async (taskId: string) => {
   tasks.value = tasks.value?.filter((task) => task.task_id !== taskId)
 }
 
+const onUpdate = async (target:HTMLInputElement, task:Todo) => {
+  await updateTask(task.task_id, { ...task, state: target.value as TodoStatusType })
+}
+
 const onSelect = (todo: Todo) => emit('select', todo)
 
 defineExpose({
@@ -36,15 +40,14 @@ defineExpose({
       </h4>
       <p class="tasks--item-description">{{ task.description }}</p>
       <div class="tasks--item-actions">
-        <select>
-          <option disabled value="">Please select one</option>
-          <option>A</option>
-          <option>B</option>
-          <option>C</option>
+        <select v-model="task.state" @change="onUpdate($event.target as HTMLInputElement, task)">
+          <option value="pending">Pending</option>
+          <option value="in progress">In Progress</option>
+          <option value="completed">Completed</option>
         </select>
         <span class="tasks--item-actions-buttons">
-          <button @click="onSelect(task)" class="btn btn--default">edit</button>
-          <button @click="onDelete(task.task_id)" class="btn btn--error">remove</button>
+          <button @click="onSelect(task)" class="btn btn--default btn--small">edit</button>
+          <button @click="onDelete(task.task_id)" class="btn btn--error btn--small">remove</button>
         </span>
       </div>
     </li>

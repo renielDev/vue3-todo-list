@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { TodoStatusType, type Todo, type TodoNoTaskId } from '@/models/Todo';
 import { reactive, unref } from 'vue';
+import FormFieldLabel from '@/components/FormFieldLabel.vue';
 
 const emit = defineEmits(['create', 'update'])
 const INITIAL_DATA: TodoNoTaskId = {
@@ -44,16 +45,36 @@ defineExpose({
 
 </script>
 <template>
-  <div>
-    <label for="name">Name:</label>
-    <input type="text" name="name" v-model="data.form.name">
-  </div>
-  <div>
-    <label for="description">Description:</label>
-    <textarea name="description" v-model="data.form.description" />
-  </div>
-  <div>
-    <button @click="onSubmit">{{ data.id ? "update": "create" }}</button>
-    <button v-if="data.id" @click="clearForm">cancel</button>
+  <div class="task-form">
+    <h3 class="green">{{ data.id ? "Edit": "Add" }} Task</h3>
+    <FormFieldLabel for="name" label="Name">
+      <input type="text" name="name" v-model="data.form.name">
+    </FormFieldLabel>
+    <FormFieldLabel for="description" label="Description">
+      <textarea name="description" :rows="4" v-model="data.form.description" />
+    </FormFieldLabel>
+    <div class="task-form--buttons">
+      <button @click="onSubmit" class="btn btn--transparent">Save</button>
+      <button v-if="data.id" class="btn btn--transparent btn-cancel" @click="clearForm">Cancel</button>
+    </div>
   </div>
 </template>
+
+<style scoped lang="scss">
+
+h3 {
+  font-size: 2.5rem;
+}
+.task-form {
+  margin-top: 15px;
+  padding: 20px;
+  &--buttons {
+    display: flex;
+    justify-content: end;
+    .btn-cancel {
+      margin-left: 8px;
+    }
+  }
+  
+}
+</style>
